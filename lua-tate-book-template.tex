@@ -1,24 +1,33 @@
-\RequirePackage{plautopatch}
+% Rerefence:
+% - https://github.com/fnshr/latex-templates
+% - https://okumuralab.org/tex/mod/forum/discuss.php?d=2661
+% - https://ctan.math.illinois.edu/macros/latex/contrib/kanbun/kanbun-ja.pdf
 \documentclass[ % ドキュメントクラス
-uplatex, % upLaTeXを使う
-dvipdfmx,
+lualatex, % LuaLaTeXを使う
 tate, % 縦書き
 % twocolumn, % 二段組
 hanging_punctuation, % ぶら下げ組
 paper=b6, % 用紙サイズ
 reference_mark=interlinear, %注の合標を行間に
-sidenote_length=10zw, % この値（デフォルト０）を設定しないと
-% \sidenote は未定義となる texdoc jlreq か
-% 参考URL http://www.tug.org/texlive//devsrc/Master/texmf-dist/doc/latex/jlreq/jlreq-ja.html
+sidenote_length=10zw,       %sidenoteのために必要
 book % 書籍のためのスタイル
 ]{jlreq}
 
 %% フォント関連
-\usepackage[T1]{fontenc} % フォントでT1を使うこと
-\usepackage{textcomp} % フォントでTS1を使うこと
-\usepackage[utf8]{inputenc} % ファイルがUTF8であること
-\usepackage[multi,deluxe,jis2004]{otf}
-\usepackage[prefernoncjk]{pxcjkcat} % なるべく「半角」扱いで。
+\usepackage{luatexja-fontspec}
+\usepackage[deluxe]{luatexja-preset}
+\usepackage{luatexja-otf}
+
+% Reference: https://qiita.com/isari/items/1d0b60b76c7ef168e376
+\usepackage{newunicodechar}
+\makeatletter
+\chardef\my@J@horizbar="2015% Unicodeの2015
+\newunicodechar{―}{\x@my@dash}
+\def\x@my@dash{\@ifnextchar―{%
+    \my@J@horizbar\kern-.5\zw\my@J@horizbar\kern-.5\zw}{%
+    \my@J@horizbar}}
+% 次が―なら2回目のkernまでを、そうでないなら普通の―を出力
+\makeatother
 
 %% 図表など
 % 図の読みこみのために
@@ -30,26 +39,31 @@ book % 書籍のためのスタイル
 \tcbuselibrary{breakable} % ページをまたいで分割できるように
 
 %% misc
-\usepackage{okumacro} % 圏点などのために
-\usepackage{plext} % 傍点 美文書7 p305 傍注参照
-\usepackage{pxrubrica} % ルビをつける（okumacroのrubyは使わない）
-\usepackage{sfkanbun} % 漢文
+% \usepackage{okumacro} % Lualatexではだめ
+% \usepackage{plext}    % Lualatexではだめ(傍点 美文書7 p305 傍注参照)
+\usepackage{lltjext}    % for LuaLaTeX
+\usepackage{pxrubrica}  % ルビをつける（okumacroのrubyは使わない）
+% \usepackage[prefix=]{gckanbun}   % https://konoyonohana.blog.fc2.com/blog-entry-610.html
+\usepackage[kumi=aki,tateaki=1,yokoaki=4]{kanbun} % https://ctan.math.illinois.edu/macros/latex/contrib/kanbun/kanbun-ja.pdf
+% \usepackage{sfkanbun} % 漢文
 % sfkanbun パッケージは、
 % http://xymtex.my.coocan.jp/fujitas2/texlatex/index.html
-% から入手可能
+% から入手可能だが、lualatexでは使えない。
+% https://okumuralab.org/tex/mod/forum/discuss.php?d=2655
+% に使えるようにしたものが配布されている。→ まともに動かない
 
 %% 見出しのスタイルの設定
 % chapterの定義
 \DeclareTobiraHeading{chapter}{1}{% chapter を扉見出しに
   format={\null\vfil {\huge\gtfamily\bfseries {\LARGE #1}#2}}, % 見出しのフォント
-  label_format={第\thechapter 章\hspace{2zw}} % ラベルのフォーマット
+  label_format={第\thechapter 章\hspace{2\zw}} % ラベルのフォーマット
 }
 \DeclareBlockHeading{chapter}{1}{ % chapter を別行見出しに
   pagebreak=cleardoublepage, % 章を始める前に改丁
   label_format={第\thechapter 章}, % ラベルのフォーマット
   font={\gtfamily\LARGE}, % 見出しのフォント
   lines=3,after_lines=2, % 見出しのために5行取り、後ろの方が2行分広い
-  indent=2zw % インデント
+  indent=2\zw % インデント
 }
 
 % section の定義
@@ -63,28 +77,33 @@ book % 書籍のためのスタイル
 \setcounter{tocdepth}{1} % sectionまでを目次に
 
 %% hyperrefの設定
-\usepackage{hyperref}
+\usepackage[%
+unicode=true,%
+pdftitle=タイトル, % PDFのタイトル
+pdfauthor=作成者, % PDFの作成者
+bookmarks=true, % PDFにしおりをつける
+bookmarksnumbered=true, % しおりに節番号などをつける
+colorlinks=false, % リンクには色をつけない
+hyperfootnotes=false, % 脚注からのリンクを作らない
+pdfborder={0 0 0}, % 枠なし
+pdfdirection=R2L, % 開く方向
+pdfpagelayout=TwoPageRight, % 奇数頁が右側になるような見開きモードで開く
+pdfpagemode=UseNone
+]{hyperref}
+
 % PDFにしたときのしおりの文字化けを防ぐ
-\usepackage{pxjahyper}
-\hypersetup{
-  pdftitle=タイトル, % PDFのタイトル
-  pdfauthor=作成者, % PDFの作成者
-  bookmarks=true, % PDFにしおりをつける
-  bookmarksnumbered=true, % しおりに節番号などをつける
-  colorlinks=false, % リンクには色をつけない
-  hyperfootnotes=false, % 脚注からのリンクを作らない
-  pdfborder={0 0 0}, % 枠なし
-  pdfdirection=R2L, % 開く方向
-  pdfpagelayout=TwoPageRight, % 奇数頁が右側になるような見開きモードで開く
-  pdfpagemode=UseNone
-}
+% \usepackage{pxjahyper}
+% Lualatexではだめ
 
 % hyperref を使っているときに
 % 目次でのページ番号の向きを適切にする
 \makeatletter
-\def\contentsline#1#2#3#4{\csname l@#1\endcsname{\hyper@linkstart{link}{#4}{#2}\hyper@linkend}{\rensuji{#3}}}
+\def\contentsline#1#2#3#4{%
+  \csname l@#1\endcsname{%
+    \hyper@linkstart{link}{#4}{#2}
+    \hyper@linkend}{\tatechuyoko{#3}}}
 \makeatother
-
+% lltjext package \rensuji{}は広すぎるので \tatechuyoko に変更.
 
 \begin{document}
 % maketitle を使わずに独自のタイトルページを作る
@@ -157,7 +176,7 @@ book % 書籍のためのスタイル
 
 「こら〳〵」「どれ〴〵」
 
-参加者は\,\rensuji{12}\,人だった。
+参加者は\,\tatechuyoko{12}\,人だった。
 
 
 \section{注釈}
@@ -171,12 +190,25 @@ book % 書籍のためのスタイル
 
 \section{漢文}
 
-% \kundoku{漢字}{ルビ}{送り仮名}{返り点}[肩返り点]<左送り仮名>(句読点)
+\Kanbun
+未(いま){ダ}‹ざ›«ル»[レ]知(し){ラ}[二]仁(じん)義(ぎ){ヲ}[一]也(なり)
+\EndKanbun
 
-\kundoku{未}{いま}{ダ}{レ}<ル>
-\kundoku{知}{}{ラ}{二}
-仁
-\kundoku{義}{}{ヲ}{一}
-\kundoku{也}{}{}{}(。)
+\printkanbun
+
+\Kanbun
+此レ乃チ信(しん)之‘所―[三]以’(ゆゑん)為ル[二]陛下ノ禽(とりこ)ト[一]也。
+\EndKanbun
+\let\信\printkanbun
+\Kanbun
+孤之有ルハ[二]孔明[一]，猶ホ‹ごと›«キ»[二]魚之有ルガ[一レ]水也。
+\EndKanbun
+\let\孔明\printkanbun
+
+\孔明\par\bfseries\信
 
 \end{document}
+%%% Local Variables:
+%%% mode: japanese-latex
+%%% TeX-master: t
+%%% End:

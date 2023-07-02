@@ -1,23 +1,25 @@
 \documentclass[ % ドキュメントクラス
-uplatex,%upLaTeXを使う
-dvipdfmx,
-a5paper,%A5サイズにする
-papersize%紙のサイズがデフォルトと違う場合、PDFにうまく伝える
-]{jsbook}
+  a5paper,%A5サイズにする
+  papersize%紙のサイズがデフォルトと違う場合、PDFにうまく伝える
+]{ltjsbook}
 
 %% フォント関連
-\usepackage[T1]{fontenc} % フォントでT1を使うこと
-\usepackage{textcomp} % フォントでTS1を使うこと
-\usepackage[utf8]{inputenc} % ファイルがUTF8であること
+\usepackage{luatexja-fontspec}
+\usepackage[no-math,match,deluxe]{luatexja-preset}
+\usepackage{luatexja-otf}
 \usepackage{newpxtext,newpxmath} % ローマンと数式の字体をPalatinoに基づいた新PXフォントで
 \usepackage{zi4}%等幅フォントをInconsolataで
-\usepackage[multi,deluxe,jis2004]{otf}
-\usepackage[prefernoncjk]{pxcjkcat} % なるべく「半角」扱いで。
-\cjkcategory{sym18}{cjk} % sym18 (U+25A0 - U+25FF Geometric Shapes) を和文文字あつかい
+% \setmonofont[%
+% AutoFakeSlant,                  %内部で擬似的な斜体を作る
+% BoldItalicFeatures={FakeSlant}, %内部で擬似的なイタリック体を作る
+% Scale=MatchLowercase]
+% {Inconsolatazi4} % 等幅フォントにInconsolataを指定
+% \usepackage[prefernoncjk]{pxcjkcat} % なるべく「半角」扱いで。
+% \cjkcategory{sym18}{cjk} % sym18 (U+25A0 - U+25FF Geometric Shapes) を和文文字あつかい
 
 %% 図表など
 % 図の読みこみのために
-\usepackage[hiresbb]{graphicx, xcolor}
+\usepackage{graphicx, xcolor}
 \usepackage{booktabs} % 表の横罫線
 \usepackage{lscape}  % 表などを90度回転させる
 
@@ -85,25 +87,21 @@ papersize%紙のサイズがデフォルトと違う場合、PDFにうまく伝�
 
 
 %% misc
-\usepackage{okumacro} % 圏点などのために
-\usepackage{pxrubrica} % ルビをつける（okumacroのrubyは使わない）
+\usepackage{luatexja-ruby}      % ルビ
 
 
 %% hyperrefの設定
-\usepackage{hyperref}
-% PDFにしたときのしおりの文字化けを防ぐ
-\usepackage{pxjahyper}
-\hypersetup{
-  pdftitle=タイトル, % PDFのタイトル
-  pdfauthor=作成者, % PDFの作成者
-  bookmarks=true, %PDFにしおりをつける
-  bookmarksnumbered=true, %しおりに節番号などをつける
-  colorlinks=false, %リンクには色をつけない
-  hyperfootnotes=false, %脚注からのリンクを作らない
-  pdfborder={0 0 0}, % リンクの枠なし
-  pdfpagelayout=TwoPageRight, %奇数頁が右側になるような見開きモードで開く
-  pdfpagemode=UseNone
-}
+\usepackage[
+unicode=true,%
+pdftitle=タイトル, % PDFのタイトル
+pdfauthor=作成者, % PDFの作成者
+bookmarks=true, %PDFにしおりをつける
+bookmarksnumbered=true, %しおりに節番号などをつける
+colorlinks=false, %リンクには色をつけない
+hyperfootnotes=false, %脚注からのリンクを作らない
+pdfborder={0 0 0}, % リンクの枠なし
+pdfpagelayout=TwoPageRight, %奇数頁が右側になるような見開きモードで開く
+pdfpagemode=UseNone]{hyperref}
 
 %% 索引
 \usepackage{makeidx}
@@ -228,14 +226,14 @@ papersize%紙のサイズがデフォルトと違う場合、PDFにうまく伝�
 
 \subsection{ルビ}
 \index{ルビ}
-\jruby{黄}{き}と\jruby{赤}{あか}と
-\jruby{緑}{みどり}の
-\jruby{高価}{こう|か}で
-\jruby{貴重}{き|ちょう}なものを
-\jruby{購入}{こう|にゅう}しました。
-\jruby[g]{閑話休題}{それはさておき}、
-\jruby[g]{昨日}{きのう}は
-\jruby[g]{心太}{ところてん}を
+\ltjruby{黄}{き}と\ltjruby{赤}{あか}と
+\ltjruby{緑}{みどり}の
+\ltjruby{高|価}{こう|か}で
+\ltjruby{貴|重}{き|ちょう}なものを
+\ltjruby{購|入}{こう|にゅう}しました。
+\ltjruby{閑話休題}{それはさておき}、
+\ltjruby{昨日}{きのう}は
+\ltjruby{心太}{ところてん}を
 ありがとう。
 
 

@@ -1,23 +1,25 @@
-\RequirePackage{plautopatch}
 \documentclass[ % ドキュメントクラス
-uplatex,%upLaTeXを使う
-dvipdfmx,
-papersize%紙のサイズがデフォルトと違う場合、PDFにうまく伝える
-]{jsarticle}
+  papersize%紙のサイズがデフォルトと違う場合、PDFにうまく伝える
+]{ltjsarticle}
 
 %% フォント関連
-\usepackage[T1]{fontenc} % フォントでT1を使うこと
-\usepackage{textcomp} % フォントでTS1を使うこと
-\usepackage[utf8]{inputenc} % ファイルがUTF8であること
+%% フォント関連
+\usepackage{luatexja-fontspec}
+\usepackage[no-math,match,deluxe]{luatexja-preset}
+\usepackage{luatexja-otf}
 \usepackage{newpxtext,newpxmath} % ローマンと数式の字体をPalatinoに基づいた新PXフォントで
 \usepackage{zi4}%等幅フォントをInconsolataで
-\usepackage[multi,deluxe,jis2004]{otf}
-\usepackage[prefernoncjk]{pxcjkcat} % なるべく「半角」扱いで。
-\cjkcategory{sym18}{cjk} % sym18 (U+25A0 - U+25FF Geometric Shapes) を和文文字あつかい
+% \setmonofont[%
+% AutoFakeSlant,                  %内部で擬似的な斜体を作る
+% BoldItalicFeatures={FakeSlant}, %内部で擬似的なイタリック体を作る
+% Scale=MatchLowercase]
+% {Inconsolatazi4} % 等幅フォントにInconsolataを指定
+% \usepackage[prefernoncjk]{pxcjkcat} % なるべく「半角」扱いで。
+% \cjkcategory{sym18}{cjk} % sym18 (U+25A0 - U+25FF Geometric Shapes) を和文文字あつかい
 
 %% 図表など
 % 図の読みこみのために
-\usepackage[hiresbb]{graphicx, xcolor}
+\usepackage{graphicx, xcolor}
 \usepackage{booktabs} % 表の横罫線
 \usepackage{lscape}  % 表などを90度回転させる
 
@@ -43,23 +45,18 @@ papersize%紙のサイズがデフォルトと違う場合、PDFにうまく伝�
 \renewcommand{\lstlistingname}{ソースコード}
 
 % misc
-\usepackage{okumacro} % 圏点などのため
-\usepackage{pxrubrica} % ルビをつける（okumacroのrubyは使わない）
+\usepackage{luatexja-ruby}      % ルビ
 
 % hyperrefの設定
-\usepackage{hyperref}
-% PDFにしたときの文字化けを防ぐ
-\usepackage{pxjahyper}
-\hypersetup{
-  bookmarks=true,%PDFにしおりをつける
-  pdftitle=タイトル, % PDFのタイトル
-  pdfauthor=著者名, % PDFの作成者
-  bookmarksnumbered=true,%しおりに節番号などをつける
-  colorlinks=false,%リンクには色をつけない
-  hyperfootnotes=false,%脚注からのリンクを作らない
-  pdfborder={0 0 0},%枠なし
-  pdfpagemode=UseNone
-}
+\usepackage[
+unicode=true,%
+pdfusetitle,
+bookmarks=true,%PDFにしおりをつける
+bookmarksnumbered=true,%しおりに節番号などをつける
+colorlinks=false,%リンクには色をつけない
+hyperfootnotes=false,%脚注からのリンクを作らない
+pdfborder={0 0 0},%枠なし
+pdfpagemode=UseNone]{hyperref}
 
 
 \title{タイトル}
